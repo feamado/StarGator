@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+import datetime
 
 
 class Star:
@@ -45,11 +46,10 @@ class MaxHeap:
 
         if self.mode == "lum":
 
-            while i != 1:
+            while i > 1:
                 parent = i // 2
-                tmp = self.heap[i]
                 if self.heap[i].luminosity > self.heap[parent].luminosity:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], tmp, parent
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
         elif self.mode == "app_size":
@@ -75,57 +75,61 @@ class MaxHeap:
             return
 
     def pop(self):
+
+        if len(self.heap) == 1:
+            return None
+        popped = self.heap[1]
+        self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
+        del self.heap[len(self.heap) - 1]
+        if len(self.heap) == 1:
+            return popped
+
+        self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
+
+        i = 1
+        end = len(self.heap)
+
+
         if self.mode == "lum":
-            if len(self.heap) == 1:
-                return None
-            popped = self.heap[1]
-            self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
-            del self.heap[len(self.heap) - 1]
-            if len(self.heap) == 1:
-                return popped
-
-            self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
-
-            i = 1
-            end = len(self.heap)
             while True:
                 left = 2 * i
                 right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].luminosity > self.heap[largest].luminosity:
+                    largest = left
+                if right < end and self.heap[right].luminosity > self.heap[largest].luminosity:
+                    largest = right
 
-                if left < end and self.heap[i].luminosity < self.heap[left].luminosity:
-                    self.heap[left], self.heap[i] = self.heap[i], self.heap[left]
-                    i = left
-                elif right < end and self.heap[i].luminosity < self.heap[right].luminosity:
-                    self.heap[right], self.heap[i] = self.heap[i], self.heap[right]
-                    i = right
+                if largest != i:
+                    self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i]
+                    i = largest
                 else:
                     return popped
 
         elif self.mode == "app_size":
-            if len(self.heap) == 1:
-                return None
-            popped = self.heap[1]
-            self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
-            del self.heap[len(self.heap) - 1]
-            if len(self.heap) == 1:
-                return popped
-
-            self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
-
-            i = 1
-            end = len(self.heap)
             while True:
                 left = 2 * i
                 right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].app_size > self.heap[largest].app_size:
+                    largest = left
+                if right < end and self.heap[right].app_size > self.heap[largest].app_size:
+                    largest = right
 
-                if left < end and self.heap[i].app_size < self.heap[left].app_size:
-                    self.heap[left], self.heap[i] = self.heap[i], self.heap[left]
-                    i = left
-                elif right < end and self.heap[i].app_size < self.heap[right].app_size:
-                    self.heap[right], self.heap[i] = self.heap[i], self.heap[right]
-                    i = right
+                if largest != i:
+                    self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i]
+                    i = largest
                 else:
                     return popped
+
+    def heap_sort(self):
+        swap = []
+        while len(self.heap)!=1:
+
+            swap.append(self.pop())
+        swap = [None] + swap
+        self.heap = swap
+
 
     def __str__(self):
         out = f"{self.heap[1]}"
@@ -178,7 +182,6 @@ def create_star_data_heap(mode):
         x = row["x"]
         y = row["y"]
         z = row["z"]
-        mag = row["mag"]
         dist = row["dist"]
         lum = row["lum"]
         app_size = row["mag"]
@@ -186,5 +189,13 @@ def create_star_data_heap(mode):
         inp = Star(name, id_type, lum, x, y, z, dist, app_size)
         out.insert(inp)
     return out
+start_time = datetime.datetime.now()
+A = create_star_data_heap("lum")
 
-create_star_data_heap("lum")
+
+print(A.heap[11].luminosity)
+A.heap_sort()
+print(A.heap[11].luminosity)
+end_time = datetime.datetime.now()
+execution_time = end_time - start_time
+print("Execution time:", execution_time)
