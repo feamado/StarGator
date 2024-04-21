@@ -247,7 +247,18 @@ def distance_between_stars(s1, s0):  # in parsecs
 
 
 def quick_sort(x):
-    return
+    pivot = len(x)
+    left = 0
+    right = len(x)-1
+    while True:
+        while x[left] < x[pivot]:
+            left+=1
+        while x[right] > x[pivot] and right>=0:
+            right-=1
+
+
+
+
 
 
 start_time = datetime.datetime.now()
