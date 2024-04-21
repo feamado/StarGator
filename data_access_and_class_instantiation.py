@@ -6,11 +6,13 @@ import datetime
 
 
 class Star:
-    def __init__(self, id, id_type, luminosity, x0, y0, z0, dist, app_size):
+    def __init__(self, id, id_type, luminosity, x0, y0, z0, dist, app_size,ci):
         self.id = id
         self.id_type = id_type
         self.name = f"{self.id}:{self.id_type}"
         self.luminosity = float(luminosity)
+        self.ci = ci
+        self.temperature = 4600*(1/(0.92*ci + 1.7) + 1/(0.92*ci +0.62)) #ballestero equation
         self.x0 = float(x0)
         self.y0 = float(y0)
         self.z0 = float(z0)
@@ -33,6 +35,8 @@ class Star:
 
     def get_name(self):
         return self.name
+    def get_temperature(self):
+        return self.temperature
 
 
 class MaxHeap:
@@ -56,11 +60,20 @@ class MaxHeap:
             self.heap.append(x)
             i = len(self.heap) - 1
 
-            while i != 1:
+            while i > 1:
                 parent = i // 2
-                tmp = self.heap[i]
                 if self.heap[i].app_size > self.heap[parent].app_size:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], tmp, parent
+                    self.heap[i], self.heap[parent], i = self.heap[parent],self.heap[i], parent
+                else:
+                    break
+        elif self.mode == "temperature":
+            self.heap.append(x)
+            i = len(self.heap) - 1
+
+            while i > 1:
+                parent = i // 2
+                if self.heap[i].temperature > self.heap[parent].temperature:
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
         else:
@@ -119,6 +132,20 @@ class MaxHeap:
                     self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
                 else:
                     return popped
+        elif self.mode == "temperature":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].temperature > self.heap[largest].temperature:
+                    largest = left
+                if right < end and self.heap[right].temperature > self.heap[largest].temperature:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return popped
 
     def heap_sort(self):
         swap = []
@@ -148,7 +175,8 @@ def create_star_data_heap(mode):
     mag = 0.0
     dist = 0.0
     lum = 0.0
-    app_size = 0
+    app_size = 0.0
+    ci = 0.0
     out = MaxHeap(mode)
     for index, row in df.iterrows():
 
@@ -181,8 +209,8 @@ def create_star_data_heap(mode):
         dist = row["dist"]
         lum = row["lum"]
         app_size = row["mag"]
-
-        inp = Star(name, id_type, lum, x, y, z, dist, app_size)
+        ci = row["ci"]
+        inp = Star(name, id_type, lum, x, y, z, dist, app_size,ci)
         out.insert(inp)
     return out
 
@@ -253,7 +281,7 @@ def quick_sort(x):
 start_time = datetime.datetime.now()
 A = create_star_data_heap("lum")
 
-print(A.heap[11].luminosity)
+print(A.heap[1].luminosity)
 A.heap_sort()
 print(A.heap[11].luminosity)
 end_time = datetime.datetime.now()
