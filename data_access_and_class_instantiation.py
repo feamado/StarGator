@@ -14,7 +14,7 @@ class Star:
         self.x0 = float(x0)
         self.y0 = float(y0)
         self.z0 = float(z0)
-        cos_th = self.z0 / (np.sqrt(np.sum(np.square([x0,y0,z0]))))
+        cos_th = self.z0 / (np.sqrt(np.sum(np.square([x0, y0, z0]))))
         tan_phi = self.y0 / self.x0
         self.phi = np.arctan(tan_phi)
         self.theta = np.arcsin(cos_th)
@@ -89,7 +89,6 @@ class MaxHeap:
         i = 1
         end = len(self.heap)
 
-
         if self.mode == "lum":
             while True:
                 left = 2 * i
@@ -117,19 +116,16 @@ class MaxHeap:
                     largest = right
 
                 if largest != i:
-                    self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i]
-                    i = largest
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
                 else:
                     return popped
 
     def heap_sort(self):
         swap = []
-        while len(self.heap)!=1:
-
+        while len(self.heap) != 1:
             swap.append(self.pop())
         swap = [None] + swap
         self.heap = swap
-
 
     def __str__(self):
         out = f"{self.heap[1]}"
@@ -189,9 +185,73 @@ def create_star_data_heap(mode):
         inp = Star(name, id_type, lum, x, y, z, dist, app_size)
         out.insert(inp)
     return out
+
+
+def create_star_data_list(mode):
+    df = pd.read_csv('hyg_v37.csv')
+
+    # find id
+    name = ""
+    id_type = ""
+    x = 0.0
+    y = 0.0
+    z = 0.0
+    mag = 0.0
+    dist = 0.0
+    lum = 0.0
+    app_size = 0
+    out = []
+    for index, row in df.iterrows():
+
+        if row["hip"] == "":
+            if row["hd"] == "":
+                if row["hr"] == "":
+                    if row["gl"] == "":
+                        if row["bf"] == "":
+                            name = row["id"]
+                            id_type = "dbid"
+                        else:
+                            name = row["gl"]
+                            id_type = "gl"
+                    else:
+                        name = row["hr"]
+                        id_type = "hr"
+                else:
+                    name = row["hr"]
+                    id_type = "hr"
+            else:
+                name = row["hd"]
+                id_type = "hd"
+        else:
+            name = row["hip"]
+            id_type = "hip"
+
+        x = row["x"]
+        y = row["y"]
+        z = row["z"]
+        dist = row["dist"]
+        lum = row["lum"]
+        app_size = row["mag"]
+
+        inp = Star(name, id_type, lum, x, y, z, dist, app_size)
+        out.append(inp)
+    return out
+
+
+def distance_between_stars(s1, s0):  # in parsecs
+    x_delta = s1.x - s0.x
+    y_delta = s1.y - s0.y
+    z_delta = s1.z - s0.z
+    sos = np.sum(np.square([x_delta, y_delta, z_delta]))
+    return np.sqrt(sos)
+
+
+def quick_sort(x):
+    return
+
+
 start_time = datetime.datetime.now()
 A = create_star_data_heap("lum")
-
 
 print(A.heap[11].luminosity)
 A.heap_sort()
