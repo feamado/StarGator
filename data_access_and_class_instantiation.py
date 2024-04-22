@@ -1,3 +1,4 @@
+import math
 from typing import List
 
 import numpy as np
@@ -6,14 +7,17 @@ import datetime
 
 
 class Star:
-    def __init__(self, id, id_type,proper_name,luminosity, x0, y0, z0, dist, app_size,ci):
+    def __init__(self, id, id_type, proper_name, luminosity, x0, y0, z0, dist, app_size, ci):
         self.id = id
         self.id_type = id_type
         self.complete_id = f"{self.id}:{self.id_type}"
         self.luminosity = float(luminosity)
         self.proper_name = proper_name
         self.ci = ci
-        self.temperature = 4600*(1/(0.92*ci + 1.7) + 1/(0.92*ci +0.62)) #ballestero equation
+        if self.ci == np.nan:
+            self.ci = 0
+        self.temperature = 4600 * (1 / (0.92 * ci + 1.7) + 1 / (0.92 * ci + 0.62))  # ballestero equation
+
         self.x0 = float(x0)
         self.y0 = float(y0)
         self.z0 = float(z0)
@@ -56,7 +60,6 @@ class Star:
         return self.z0
 
 
-
 class MaxHeap:
     def __init__(self, mode):
         self.heap = [None]
@@ -79,7 +82,7 @@ class MaxHeap:
             while i > 1:
                 parent = i // 2
                 if self.heap[i].app_size > self.heap[parent].app_size:
-                    self.heap[i], self.heap[parent], i = self.heap[parent],self.heap[i], parent
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
         elif self.mode == "temperature":
@@ -161,12 +164,7 @@ class MaxHeap:
                 else:
                     return popped
 
-    def re_heapify(self,mode):
-        self.mode = mode
-        i = 1
-        end = len(self.heap)
-
-
+    def re_heapify_helper(self, i, end):
         if self.mode == "lum":
             while True:
                 left = 2 * i
@@ -182,6 +180,7 @@ class MaxHeap:
                     i = largest
                 else:
                     return
+
         elif self.mode == "app_size":
             while True:
                 left = 2 * i
@@ -211,6 +210,17 @@ class MaxHeap:
                 else:
                     return
 
+    def re_heapify(self, mode):
+        if mode == self.mode:
+            return
+        self.mode = mode
+
+        i = len(self.heap) // 2
+        end = len(self.heap)
+        while i >= 1:
+            self.re_heapify_helper(i, end)
+            i = i - 1
+
     def heap_sort(self):
         swap = []
         while len(self.heap) != 1:
@@ -226,10 +236,12 @@ class MaxHeap:
 
         return out
 
-
 def create_star_data_heap(mode):
+    start_time = datetime.datetime.now()
     df = pd.read_csv('hyg_v37.csv')
-
+    end_time = datetime.datetime.now()
+    execution_time = end_time - start_time
+    print("Execution time:", execution_time)
     # find id
     proper_name = ""
     id = ""
@@ -243,6 +255,7 @@ def create_star_data_heap(mode):
     app_size = 0.0
     ci = 0.0
     out = MaxHeap(mode)
+    cnt = 0
     for index, row in df.iterrows():
 
         if row["hip"] == "":
@@ -268,22 +281,24 @@ def create_star_data_heap(mode):
             id = row["hip"]
             id_type = "hip"
 
-        x = row["x"]
-        y = row["y"]
-        z = row["z"]
-        dist = row["dist"]
-        lum = row["lum"]
-        app_size = row["mag"]
+        x = float(row["x"])
+        y = float(row["y"])
+        z = float(row["z"])
+        dist = float(row["dist"])
+        lum = (row["lum"])
+        app_size = float(row["mag"])
         ci = row["ci"]
         proper_name = row["proper"]
-        inp = Star(id, id_type, proper_name,lum, x, y, z, dist, app_size,ci)
+        inp = Star(id, id_type, proper_name, lum, x, y, z, dist, app_size, ci)
         out.insert(inp)
     return out
 
 
 def create_star_data_list(mode):
+    start_time = datetime.datetime.now()
     df = pd.read_csv('hyg_v37.csv')
-
+    end_time = datetime.datetime.now()
+    execution_time = end_time - start_time
     # find id
     proper_name = ""
     id = ""
@@ -322,13 +337,15 @@ def create_star_data_list(mode):
             id = row["hip"]
             id_type = "hip"
 
-        x = row["x"]
-        y = row["y"]
-        z = row["z"]
-        dist = row["dist"]
-        lum = row["lum"]
-        app_size = row["mag"]
-        ci = row["ci"]
+        x = float(row["x"])
+        y = float(row["y"])
+        z = float(["z"])
+        dist = float(row["dist"])
+        lum = float(row["lum"])
+        app_size = float(row["mag"])
+        ci = float(row["ci"])
+        if app_size == 6.38:
+            print(ci, "helloooo")
         proper_name = row["proper"]
         inp = Star(id, id_type, proper_name, lum, x, y, z, dist, app_size, ci)
         out.append(inp)
@@ -351,11 +368,12 @@ start_time = datetime.datetime.now()
 A = create_star_data_heap("lum")
 B = create_star_data_heap("temperature")
 print(A.heap[1].luminosity)
-print(A.heap[1].app_size)
-A.re_heapify("temperature")
-print(A.heap[1].luminosity)
-print(A.heap[1].app_size)
+print(A.heap[1].temperature)
 print(B.heap[1].luminosity)
+A.re_heapify("temperature")
+print(A.heap[1].temperature)
+print(B.heap[1].temperature)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
+
