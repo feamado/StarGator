@@ -852,5 +852,4 @@ end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
 arr = [None,9,4,10,11,3]
-quick_sort(arr,"max","f")
 print(arr)
