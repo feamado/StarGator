@@ -764,7 +764,7 @@ def create_star_data_heap(mode):
         dist = float(row["dist"])
         lum = (row["lum"])
         app_size = float(row["mag"])
-        ci = row["ci"]
+        ci = float(row["ci"])
         if ci == math.nan:
             ci = 20
         proper_name = row["proper"]
@@ -829,6 +829,9 @@ def create_star_data_list(mode):
         inp = Star(id, id_type, proper_name, lum, x, y, z, dist, app_size, ci)
         out.append(inp)
     return out
+
+
+
 
 
 def distance_between_stars(s1, s0):  # in parsecs
