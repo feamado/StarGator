@@ -154,7 +154,7 @@ class MaxHeap:
             return
 
     def pop(self):
-        if self.sort_mode  == min:
+        if self.sort_mode == min:
             return self.min_pop()
 
         if len(self.heap) == 1:
@@ -175,9 +175,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].luminosity > self.heap[largest].luminosity:
+                if left < end and self.heap[left].luminosity >= self.heap[largest].luminosity:
                     largest = left
-                if right < end and self.heap[right].luminosity > self.heap[largest].luminosity:
+                if right < end and self.heap[right].luminosity >= self.heap[largest].luminosity:
                     largest = right
 
                 if largest != i:
@@ -191,9 +191,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].app_size > self.heap[largest].app_size:
+                if left < end and self.heap[left].app_size >= self.heap[largest].app_size:
                     largest = left
-                if right < end and self.heap[right].app_size > self.heap[largest].app_size:
+                if right < end and self.heap[right].app_size >= self.heap[largest].app_size:
                     largest = right
 
                 if largest != i:
@@ -205,9 +205,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].temperature > self.heap[largest].temperature:
+                if left < end and self.heap[left].temperature >= self.heap[largest].temperature:
                     largest = left
-                if right < end and self.heap[right].temperature > self.heap[largest].temperature:
+                if right < end and self.heap[right].temperature >= self.heap[largest].temperature:
                     largest = right
 
                 if largest != i:
@@ -219,9 +219,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].ci > self.heap[largest].ci:
+                if left < end and self.heap[left].ci >= self.heap[largest].ci:
                     largest = left
-                if right < end and self.heap[right].ci > self.heap[largest].ci:
+                if right < end and self.heap[right].ci >= self.heap[largest].ci:
                     largest = right
 
                 if largest != i:
@@ -234,9 +234,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].distance > self.heap[largest].distance:
+                if left < end and self.heap[left].distance >= self.heap[largest].distance:
                     largest = left
-                if right < end and self.heap[right].distance > self.heap[largest].distance:
+                if right < end and self.heap[right].distance >= self.heap[largest].distance:
                     largest = right
 
                 if largest != i:
@@ -248,9 +248,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].x0 > self.heap[largest].x0:
+                if left < end and self.heap[left].x0 >= self.heap[largest].x0:
                     largest = left
-                if right < end and self.heap[right].x0 > self.heap[largest].x0:
+                if right < end and self.heap[right].x0 >= self.heap[largest].x0:
                     largest = right
 
                 if largest != i:
@@ -262,9 +262,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].y0 > self.heap[largest].y0:
+                if left < end and self.heap[left].y0 >= self.heap[largest].y0:
                     largest = left
-                if right < end and self.heap[right].y0 > self.heap[largest].y0:
+                if right < end and self.heap[right].y0 >= self.heap[largest].y0:
                     largest = right
 
                 if largest != i:
@@ -276,9 +276,9 @@ class MaxHeap:
                 left = 2 * i
                 right = 2 * i + 1
                 largest = i
-                if left < end and self.heap[left].z0 > self.heap[largest].z0:
+                if left < end and self.heap[left].z0 >= self.heap[largest].z0:
                     largest = left
-                if right < end and self.heap[right].z0 > self.heap[largest].z0:
+                if right < end and self.heap[right].z0 >= self.heap[largest].z0:
                     largest = right
 
                 if largest != i:
@@ -692,14 +692,14 @@ class MaxHeap:
 
         swap = []
         if(self.sort_mode == "max"):
-            while len(self.heap) != 1:
+            while len(self.heap)  > 1:
                 swap.append(self.pop())
             swap = [None] + swap
             self.heap = swap
             return
         elif(self.sort_mode == "min"):
 
-            while len(self.heap) != 1:
+            while len(self.heap) > 1:
                 swap.append(self.min_pop())
             swap = [None] + swap
             self.heap = swap
@@ -713,39 +713,7 @@ class MaxHeap:
 
         return out
 
-def max_quick_sort_helper(x, left, right, mode):
 
-    if (left > right):
-        pivot_idx = max_partition(x, left, right, mode)
-
-        max_partition(x, left, pivot_idx, mode)
-        max_partition(x, pivot_idx + 1, right, mode)
-    return x
-
-
-def min_quick_sort_helper(x,left,right,mode):
-    return
-
-
-def max_partition(x, left, right, mode):
-    i = left
-    j = left
-    pivot_idx = right
-    # scanning to right
-    while (j > right):
-            # swap if greater than pivot this keeps greater items than pivot to rhe left of new pivot
-        if x[j] >= x[pivot_idx]:
-            x[j], x[i] = x[i], x[j]
-            i += 1
-        j += 1
-    x[i + 1], x[pivot_idx], pivot_idx = x[pivot_idx], x[i + 1], i + 1
-    return pivot_idx
-
-def quick_sort(x, mode,sort_mode):
-    if(sort_mode == "max"):
-        max_quick_sort_helper(x, 1, len(x) - 1, mode)
-    if(sort_mode == "min"):
-        return
 
 
 
@@ -878,13 +846,14 @@ def distance_between_stars(s1, s0):  # in parsecs
 
 
 start_time = datetime.datetime.now()
-A = create_star_data_heap("x")
-print(A.heap[1].luminosity)
-print(A.heap[1].temperature)
-A.heap_sort("lum","min")
-print(A.heap[1].luminosity)
-end_time = datetime.datetime.now()
-execution_time = end_time - start_time
-print("Execution time:", execution_time)
+#A = create_star_data_heap("x")
+#print(A.heap[1].luminosity)
+#print(A.heap[1].temperature)
+#A.heap_sort("lum","min")
+#print(A.heap[1].luminosity)
+#end_time = datetime.datetime.now()
+#execution_time = end_time - start_time
+#print("Execution time:", execution_time)
 arr = [None,9,4,10,11,3]
+quick_sort(arr,"max","mee")
 print(arr)
