@@ -803,7 +803,7 @@ def create_star_data_heap(mode):
         app_size = float(row["mag"])
         ci = row["ci"]
         if ci == math.nan:
-            continue
+            ci = 20
         proper_name = row["proper"]
         inp = Star(id, id_type, proper_name, lum, x, y, z, dist, app_size, ci)
         out.insert(inp)
