@@ -24,7 +24,13 @@ class Star:
         cos_th = self.z0 / (np.sqrt(np.sum(np.square([x0, y0, z0]))))
         tan_phi = self.y0 / self.x0
         self.phi = np.arctan(tan_phi)
-        self.theta = np.arcsin(cos_th)
+        if(x0 < 0):
+            if(y0 < 0):
+                self.phi += math.pi
+            else:
+                self.phi -=math.pi
+        self.theta = np.arccos(cos_th)
+        self.theta = math.pi/2 - self.theta
         self.app_size = float(app_size)
         self.distance = dist
         self.coords = f"{self.x0}, {self.y0}, {self.z0}"
@@ -681,6 +687,12 @@ class MaxHeap:
         swap = [None] + swap
         self.heap = swap
 
+    def heap_sort(self):
+        swap = []
+        while len(self.heap) != 1:
+            swap.append(self.pop())
+        swap = [None] + swap
+        self.heap = swap
 
     def __str__(self):
         out = f"{self.heap[1]}"
@@ -822,13 +834,13 @@ def quick_sort(x):
 
 
 start_time = datetime.datetime.now()
-A = create_star_data_heap("x")
+A = create_star_data_heap("lum")
 B = create_star_data_heap("temperature")
-B.re_heapify("luminosity","min")
+B.re_heapify("lum","max")
 print(A.heap[1].luminosity)
 print(A.heap[1].temperature)
 print(B.heap[1].luminosity)
-A.re_heapify("luminosity","min")
+A.re_heapify("lum","min")
 print(A.heap[2].luminosity)
 print(B.heap[1].luminosity)
 end_time = datetime.datetime.now()
