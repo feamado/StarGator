@@ -519,11 +519,14 @@ class MaxHeap:
         else:
             return
 
-    def re_heapify(self, mode,sort_mode):
+    def re_heapify(self, mode,sort_mode = "max" ):
+
+        if mode == self.mode and sort_mode == self.sort_mode:
+            return
+
         if sort_mode =="min":
             self.sort_mode = "min"
-        if mode == self.mode:
-            return
+
         self.mode = mode
         if sort_mode == "min":
             i = len(self.heap) // 2
@@ -535,226 +538,13 @@ class MaxHeap:
             i = len(self.heap) // 2
             end = len(self.heap)
             while i >= 1:
-                self.min_re_heapify_helper(i, end)
+                self.re_heapify_helper(i, end)
                 i = i - 1
-
-    def min_insert(self, x):
-        if self.sort_mode!= "min":
-            return 
-        self.heap.append(x)
-        i = len(self.heap) - 1
-
-        if self.mode == "lum":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].luminosity < self.heap[parent].luminosity:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "app_size":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].app_size < self.heap[parent].app_size:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "temperature":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].temperature < self.heap[parent].temperature:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "distance":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].distance < self.heap[parent].distance:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "ci":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].ci < self.heap[parent].ci:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "x":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].x0 < self.heap[parent].x0:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "y":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].y0 < self.heap[parent].y0:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        elif self.mode == "z":
-
-            while i < 1:
-                parent = i // 2
-                if self.heap[i].z0 < self.heap[parent].z0:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
-                else:
-                    break
-        else:
-
-            while i < 1:
-                parent = i // 2
-                tmp = self.heap[i]
-                if self.heap[i].app_size < self.heap[parent].app_size:
-                    self.heap[i], self.heap[parent], i = self.heap[parent], tmp, parent
-                else:
-                    break
-            return
-
-    def min_pop(self):
-        if self.sort_mode !="min":
-            return 
-        if len(self.heap) == 1:
-            return None
-        popped = self.heap[1]
-        self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
-        del self.heap[len(self.heap) - 1]
-        if len(self.heap) == 1:
-            return popped
-
-        self.heap[1], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[1]
-
-        i = 1
-        end = len(self.heap)
-
-        if self.mode == "lum":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].luminosity < self.heap[smallest].luminosity:
-                    smallest = left
-                if right < end and self.heap[right].luminosity < self.heap[smallest].luminosity:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]
-                    i = smallest
-                else:
-                    return popped
-
-        elif self.mode == "app_size":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].app_size < self.heap[smallest].app_size:
-                    smallest = left
-                if right < end and self.heap[right].app_size < self.heap[smallest].app_size:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
-        elif self.mode == "temperature":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].temperature < self.heap[smallest].temperature:
-                    smallest = left
-                if right < end and self.heap[right].temperature < self.heap[smallest].temperature:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
-        elif self.mode == "ci":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].ci < self.heap[smallest].ci:
-                    smallest = left
-                if right < end and self.heap[right].ci < self.heap[smallest].ci:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
-
-        elif self.mode == "distance":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].distance < self.heap[smallest].distance:
-                    smallest = left
-                if right < end and self.heap[right].distance < self.heap[smallest].distance:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
-        elif self.mode == "x":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].x0 < self.heap[smallest].x0:
-                    smallest = left
-                if right < end and self.heap[right].x0 < self.heap[smallest].x0:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
-        elif self.mode == "y":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].y0 < self.heap[smallest].y0:
-                    smallest = left
-                if right < end and self.heap[right].y0 < self.heap[smallest].y0:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
-        elif self.mode == "z":
-            while True:
-                left = 2 * i
-                right = 2 * i + 1
-                smallest = i
-                if left < end and self.heap[left].z0 < self.heap[smallest].z0:
-                    smallest = left
-                if right < end and self.heap[right].z0 < self.heap[smallest].z0:
-                    smallest = right
-
-                if smallest != i:
-                    self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
-                else:
-                    return popped
 
     def min_heap_sort(self):
         if self.sort_mode!="min":
-            return 
-        
+            return
+
         swap = []
         while len(self.heap) != 1:
             swap.append(self.min_pop())
@@ -901,12 +691,13 @@ def quick_sort(x):
 start_time = datetime.datetime.now()
 A = create_star_data_heap("x")
 B = create_star_data_heap("temperature")
+B.re_heapify("temperature","min")
 print(A.heap[1].luminosity)
 print(A.heap[1].temperature)
 print(B.heap[1].luminosity)
-A.re_heapify("temperature")
-print(A.heap[1].temperature)
-print(B.heap[1].temperature)
+A.re_heapify("temperature","min")
+print(A.heap[1].luminosity)
+print(B.heap[1].luminosity)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
