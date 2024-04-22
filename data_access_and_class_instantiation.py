@@ -14,8 +14,6 @@ class Star:
         self.luminosity = float(luminosity)
         self.proper_name = proper_name
         self.ci = ci
-        if self.ci == np.nan:
-            self.ci = 0
         self.temperature = 4600 * (1 / (0.92 * ci + 1.7) + 1 / (0.92 * ci + 0.62))  # ballestero equation
 
         self.x0 = float(x0)
