@@ -6,11 +6,12 @@ import datetime
 
 
 class Star:
-    def __init__(self, id, id_type, luminosity, x0, y0, z0, dist, app_size,ci):
+    def __init__(self, id, id_type,proper_name,luminosity, x0, y0, z0, dist, app_size,ci):
         self.id = id
         self.id_type = id_type
-        self.name = f"{self.id}:{self.id_type}"
+        self.complete_id = f"{self.id}:{self.id_type}"
         self.luminosity = float(luminosity)
+        self.proper_name = proper_name
         self.ci = ci
         self.temperature = 4600*(1/(0.92*ci + 1.7) + 1/(0.92*ci +0.62)) #ballestero equation
         self.x0 = float(x0)
@@ -33,10 +34,27 @@ class Star:
     def get_distance(self):
         return float(self.distance)
 
-    def get_name(self):
-        return self.name
+    def get_complete_id(self):
+        return self.complete_id
+
     def get_temperature(self):
         return self.temperature
+
+    def get_phi(self):
+        return self.phi
+
+    def get_theta(self):
+        return self.theta
+
+    def get_x(self):
+        return self.x0
+
+    def get_y(self):
+        return self.y0
+
+    def get_z(self):
+        return self.z0
+    
 
 
 class MaxHeap:
@@ -167,7 +185,8 @@ def create_star_data_heap(mode):
     df = pd.read_csv('hyg_v37.csv')
 
     # find id
-    name = ""
+    proper_name = ""
+    id = ""
     id_type = ""
     x = 0.0
     y = 0.0
@@ -185,22 +204,22 @@ def create_star_data_heap(mode):
                 if row["hr"] == "":
                     if row["gl"] == "":
                         if row["bf"] == "":
-                            name = row["id"]
+                            id = row["id"]
                             id_type = "dbid"
                         else:
-                            name = row["gl"]
+                            id = row["gl"]
                             id_type = "gl"
                     else:
-                        name = row["hr"]
+                        id = row["hr"]
                         id_type = "hr"
                 else:
-                    name = row["hr"]
+                    id = row["hr"]
                     id_type = "hr"
             else:
-                name = row["hd"]
+                id = row["hd"]
                 id_type = "hd"
         else:
-            name = row["hip"]
+            id = row["hip"]
             id_type = "hip"
 
         x = row["x"]
@@ -210,7 +229,8 @@ def create_star_data_heap(mode):
         lum = row["lum"]
         app_size = row["mag"]
         ci = row["ci"]
-        inp = Star(name, id_type, lum, x, y, z, dist, app_size,ci)
+        proper_name = row["proper"]
+        inp = Star(id, id_type, proper_name,lum, x, y, z, dist, app_size,ci)
         out.insert(inp)
     return out
 
@@ -219,7 +239,8 @@ def create_star_data_list(mode):
     df = pd.read_csv('hyg_v37.csv')
 
     # find id
-    name = ""
+    proper_name = ""
+    id = ""
     id_type = ""
     x = 0.0
     y = 0.0
@@ -227,7 +248,8 @@ def create_star_data_list(mode):
     mag = 0.0
     dist = 0.0
     lum = 0.0
-    app_size = 0
+    app_size = 0.0
+    ci = 0.0
     out = []
     for index, row in df.iterrows():
 
@@ -236,22 +258,22 @@ def create_star_data_list(mode):
                 if row["hr"] == "":
                     if row["gl"] == "":
                         if row["bf"] == "":
-                            name = row["id"]
+                            id = row["id"]
                             id_type = "dbid"
                         else:
-                            name = row["gl"]
+                            id = row["gl"]
                             id_type = "gl"
                     else:
-                        name = row["hr"]
+                        id = row["hr"]
                         id_type = "hr"
                 else:
-                    name = row["hr"]
+                    id = row["hr"]
                     id_type = "hr"
             else:
-                name = row["hd"]
+                id = row["hd"]
                 id_type = "hd"
         else:
-            name = row["hip"]
+            id = row["hip"]
             id_type = "hip"
 
         x = row["x"]
@@ -260,8 +282,9 @@ def create_star_data_list(mode):
         dist = row["dist"]
         lum = row["lum"]
         app_size = row["mag"]
-
-        inp = Star(name, id_type, lum, x, y, z, dist, app_size)
+        ci = row["ci"]
+        proper_name = row["proper"]
+        inp = Star(id, id_type, proper_name, lum, x, y, z, dist, app_size, ci)
         out.append(inp)
     return out
 
@@ -281,7 +304,7 @@ def quick_sort(x):
 start_time = datetime.datetime.now()
 A = create_star_data_heap("lum")
 
-print(A.heap[1].luminosity)
+print(A.heap[1].theta)
 A.heap_sort()
 print(A.heap[11].luminosity)
 end_time = datetime.datetime.now()
