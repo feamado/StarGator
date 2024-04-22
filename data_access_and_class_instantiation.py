@@ -156,7 +156,7 @@ class MaxHeap:
     def pop(self):
         if self.sort_mode  == min:
             return self.min_pop()
-        
+
         if len(self.heap) == 1:
             return None
         popped = self.heap[1]
@@ -548,8 +548,6 @@ class MaxHeap:
                 self.re_heapify_helper(i, end)
                 i = i - 1
 
-
-
     def min_pop(self):
         if self.sort_mode !="min":
             return
@@ -686,10 +684,14 @@ class MaxHeap:
 
 
 
-    def heap_sort(self,sort_mode):
+    def heap_sort(self,mode,sort_mode):
+        if(sort_mode != self.sort_mode):
+            self.re_heapify(mode,sort_mode)
+
+
+
 
         swap = []
-
         if(sort_mode == "max"):
             while len(self.heap) != 1:
                 swap.append(self.pop())
