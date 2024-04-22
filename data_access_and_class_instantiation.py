@@ -680,11 +680,10 @@ class MaxHeap:
                 else:
                     return popped
 
-
-
-
-
     def heap_sort(self,mode,sort_mode):
+
+
+
         if(sort_mode != self.sort_mode):
             self.re_heapify(mode,sort_mode)
 
@@ -692,20 +691,19 @@ class MaxHeap:
 
 
         swap = []
-        if(sort_mode == "max"):
+        if(self.sort_mode == "max"):
             while len(self.heap) != 1:
                 swap.append(self.pop())
             swap = [None] + swap
             self.heap = swap
-        elif(sort_mode == "min"):
+            return
+        elif(self.sort_mode == "min"):
 
             while len(self.heap) != 1:
-                swap.append(self.min_pop)
+                swap.append(self.min_pop())
             swap = [None] + swap
             self.heap = swap
-
-
-
+            return
 
     def __str__(self):
         out = f"{self.heap[1]}"
@@ -714,6 +712,42 @@ class MaxHeap:
                 out += f", {self.heap[x]}"
 
         return out
+
+def max_quick_sort_helper(x, left, right, mode):
+
+    if (left > right):
+        pivot_idx = max_partition(x, left, right, mode)
+
+        max_partition(x, left, pivot_idx, mode)
+        max_partition(x, pivot_idx + 1, right, mode)
+    return x
+
+
+def min_quick_sort_helper(x,left,right,mode):
+    return
+
+
+def max_partition(x, left, right, mode):
+    i = left
+    j = left
+    pivot_idx = right
+    # scanning to right
+    while (j > right):
+            # swap if greater than pivot this keeps greater items than pivot to rhe left of new pivot
+        if x[j] >= x[pivot_idx]:
+            x[j], x[i] = x[i], x[j]
+            i += 1
+        j += 1
+    x[i + 1], x[pivot_idx], pivot_idx = x[pivot_idx], x[i + 1], i + 1
+    return pivot_idx
+
+def quick_sort(x, mode,sort_mode):
+    if(sort_mode == "max"):
+        max_quick_sort_helper(x, 1, len(x) - 1, mode)
+    if(sort_mode == "min"):
+        return
+
+
 
 
 def create_star_data_heap(mode):
@@ -847,7 +881,7 @@ start_time = datetime.datetime.now()
 A = create_star_data_heap("x")
 print(A.heap[1].luminosity)
 print(A.heap[1].temperature)
-A.re_heapify("temperature","max")
+A.heap_sort("lum","min")
 print(A.heap[1].luminosity)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
