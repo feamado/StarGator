@@ -73,7 +73,7 @@ class MaxHeap:
         self.sort_mode = "max"  # default
 
     def insert(self, x):
-        if self.sort_mode != "max":
+        if self.sort_mode == "min":
             return
         self.heap.append(x)
         i = len(self.heap) - 1
@@ -154,8 +154,9 @@ class MaxHeap:
             return
 
     def pop(self):
-        if self.sort_mode != "max":
-            return
+        if self.sort_mode  == min:
+            return self.min_pop()
+        
         if len(self.heap) == 1:
             return None
         popped = self.heap[1]
