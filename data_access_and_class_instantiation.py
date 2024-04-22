@@ -682,7 +682,7 @@ class MaxHeap:
 
 
 
-        if(sort_mode != self.sort_mode):
+        if(mode != self.mode or sort_mode != self.sort_mode):
             self.re_heapify(mode,sort_mode)
 
 
