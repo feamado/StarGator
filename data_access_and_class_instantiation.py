@@ -93,6 +93,46 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
+        elif self.mode == "distance":
+
+            while i > 1:
+                parent = i // 2
+                if self.heap[i].distance > self.heap[parent].distance:
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
+                else:
+                    break
+        elif self.mode == "ci":
+
+            while i > 1:
+                parent = i // 2
+                if self.heap[i].ci > self.heap[parent].ci:
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
+                else:
+                    break
+        elif self.mode == "x":
+
+            while i > 1:
+                parent = i // 2
+                if self.heap[i].x0 > self.heap[parent].x0:
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
+                else:
+                    break
+        elif self.mode == "y":
+
+            while i > 1:
+                parent = i // 2
+                if self.heap[i].y0 > self.heap[parent].y0:
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
+                else:
+                    break
+        elif self.mode == "z":
+
+            while i > 1:
+                parent = i // 2
+                if self.heap[i].z0 > self.heap[parent].z0:
+                    self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
+                else:
+                    break
         else:
 
             while i > 1:
@@ -163,6 +203,77 @@ class MaxHeap:
                     self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
                 else:
                     return popped
+        elif self.mode == "ci":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].ci > self.heap[largest].ci:
+                    largest = left
+                if right < end and self.heap[right].ci > self.heap[largest].ci:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return popped
+
+        elif self.mode == "distance":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].distance > self.heap[largest].distance:
+                    largest = left
+                if right < end and self.heap[right].distance > self.heap[largest].distance:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return popped
+        elif self.mode == "x0":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].x0 > self.heap[largest].x0:
+                    largest = left
+                if right < end and self.heap[right].x0 > self.heap[largest].x0:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return popped
+        elif self.mode == "y0":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].y0 > self.heap[largest].y0:
+                    largest = left
+                if right < end and self.heap[right].y0 > self.heap[largest].y0:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return popped
+        elif self.mode == "z0":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].z0 > self.heap[largest].z0:
+                    largest = left
+                if right < end and self.heap[right].z0 > self.heap[largest].z0:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return popped
 
     def re_heapify_helper(self, i, end):
         if self.mode == "lum":
@@ -209,6 +320,80 @@ class MaxHeap:
                     self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
                 else:
                     return
+        elif self.mode == "distance":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].distance > self.heap[largest].distance:
+                    largest = left
+                if right < end and self.heap[right].distance > self.heap[largest].distance:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
+        elif self.mode == "ci":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].ci > self.heap[largest].ci:
+                    largest = left
+                if right < end and self.heap[right].ci > self.heap[largest].ci:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
+        
+        
+        elif self.mode == "x0":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].ci > self.heap[largest].ci:
+                    largest = left
+                if right < end and self.heap[right].ci > self.heap[largest].ci:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
+        elif self.mode == "y0":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].ci > self.heap[largest].ci:
+                    largest = left
+                if right < end and self.heap[right].ci > self.heap[largest].ci:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
+        elif self.mode == "z0":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].ci > self.heap[largest].ci:
+                    largest = left
+                if right < end and self.heap[right].ci > self.heap[largest].ci:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
+        else:
+            return 
 
     def re_heapify(self, mode):
         if mode == self.mode:
