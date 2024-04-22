@@ -54,7 +54,7 @@ class Star:
 
     def get_z(self):
         return self.z0
-    
+
 
 
 class MaxHeap:
@@ -75,8 +75,6 @@ class MaxHeap:
                 else:
                     break
         elif self.mode == "app_size":
-            self.heap.append(x)
-            i = len(self.heap) - 1
 
             while i > 1:
                 parent = i // 2
@@ -85,8 +83,6 @@ class MaxHeap:
                 else:
                     break
         elif self.mode == "temperature":
-            self.heap.append(x)
-            i = len(self.heap) - 1
 
             while i > 1:
                 parent = i // 2
@@ -96,7 +92,7 @@ class MaxHeap:
                     break
         else:
 
-            while i != 1:
+            while i > 1:
                 parent = i // 2
                 tmp = self.heap[i]
                 if self.heap[i].app_size > self.heap[parent].app_size:
@@ -164,6 +160,56 @@ class MaxHeap:
                     self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
                 else:
                     return popped
+
+    def re_heapify(self,mode):
+        self.mode = mode
+        i = 1
+        end = len(self.heap)
+
+
+        if self.mode == "lum":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].luminosity > self.heap[largest].luminosity:
+                    largest = left
+                if right < end and self.heap[right].luminosity > self.heap[largest].luminosity:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i]
+                    i = largest
+                else:
+                    return
+        elif self.mode == "app_size":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].app_size > self.heap[largest].app_size:
+                    largest = left
+                if right < end and self.heap[right].app_size > self.heap[largest].app_size:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
+        elif self.mode == "temperature":
+            while True:
+                left = 2 * i
+                right = 2 * i + 1
+                largest = i
+                if left < end and self.heap[left].temperature > self.heap[largest].temperature:
+                    largest = left
+                if right < end and self.heap[right].temperature > self.heap[largest].temperature:
+                    largest = right
+
+                if largest != i:
+                    self.heap[i], self.heap[largest], i = self.heap[largest], self.heap[i], largest
+                else:
+                    return
 
     def heap_sort(self):
         swap = []
@@ -303,10 +349,13 @@ def quick_sort(x):
 
 start_time = datetime.datetime.now()
 A = create_star_data_heap("lum")
-
-print(A.heap[1].theta)
-A.heap_sort()
-print(A.heap[11].luminosity)
+B = create_star_data_heap("temperature")
+print(A.heap[1].luminosity)
+print(A.heap[1].app_size)
+A.re_heapify("temperature")
+print(A.heap[1].luminosity)
+print(A.heap[1].app_size)
+print(B.heap[1].luminosity)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
