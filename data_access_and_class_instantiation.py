@@ -24,13 +24,13 @@ class Star:
         cos_th = self.z0 / (np.sqrt(np.sum(np.square([x0, y0, z0]))))
         tan_phi = self.y0 / self.x0
         self.phi = np.arctan(tan_phi)
-        if(x0 < 0):
-            if(y0 < 0):
+        if (x0 < 0):
+            if (y0 < 0):
                 self.phi += math.pi
             else:
-                self.phi -=math.pi
+                self.phi -= math.pi
         self.theta = np.arccos(cos_th)
-        self.theta = math.pi/2 - self.theta
+        self.theta = math.pi / 2 - self.theta
         self.app_size = float(app_size)
         self.distance = dist
         self.coords = f"{self.x0}, {self.y0}, {self.z0}"
@@ -546,6 +546,9 @@ class MaxHeap:
             while i > 0:
                 self.re_heapify_helper(i, end)
                 i = i - 1
+
+
+
     def min_pop(self):
         if self.sort_mode !="min":
             return
@@ -677,22 +680,29 @@ class MaxHeap:
                     self.heap[i], self.heap[smallest], i = self.heap[smallest], self.heap[i], smallest
                 else:
                     return popped
-    def min_heap_sort(self):
-        if self.sort_mode!="min":
-            return
+
+
+
+
+
+    def heap_sort(self,sort_mode):
 
         swap = []
-        while len(self.heap) != 1:
-            swap.append(self.min_pop())
-        swap = [None] + swap
-        self.heap = swap
 
-    def heap_sort(self):
-        swap = []
-        while len(self.heap) != 1:
-            swap.append(self.pop())
-        swap = [None] + swap
-        self.heap = swap
+        if(sort_mode == "max"):
+            while len(self.heap) != 1:
+                swap.append(self.pop())
+            swap = [None] + swap
+            self.heap = swap
+        elif(sort_mode == "min"):
+
+            while len(self.heap) != 1:
+                swap.append(self.min_pop)
+            swap = [None] + swap
+            self.heap = swap
+
+
+
 
     def __str__(self):
         out = f"{self.heap[1]}"
@@ -822,27 +832,22 @@ def create_star_data_list(mode):
 
 
 def distance_between_stars(s1, s0):  # in parsecs
-    x_delta = s1.x - s0.x
-    y_delta = s1.y - s0.y
-    z_delta = s1.z - s0.z
+    x_delta = s1.x0 - s0.x0
+    y_delta = s1.y0 - s0.y0
+    z_delta = s1.z0 - s0.z0
     sos = np.sum(np.square([x_delta, y_delta, z_delta]))
     return np.sqrt(sos)
 
 
-def quick_sort(x):
-    return
-
 
 start_time = datetime.datetime.now()
-A = create_star_data_heap("lum")
-B = create_star_data_heap("temperature")
-B.re_heapify("lum","max")
+A = create_star_data_heap("x")
 print(A.heap[1].luminosity)
 print(A.heap[1].temperature)
-print(B.heap[1].luminosity)
-A.re_heapify("lum","min")
-print(A.heap[2].luminosity)
-print(B.heap[1].luminosity)
+A.re_heapify("temperature","max")
+print(A.heap[1].luminosity)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
+arr = [None,9,4,10,11,3]
+print(arr)
