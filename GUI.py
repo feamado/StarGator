@@ -1,4 +1,4 @@
-mport tkinter as tk
+import tkinter as tk
 from tkinter import ttk
 import math
 from matplotlib import pyplot
@@ -8,9 +8,11 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,  
 NavigationToolbar2Tk) 
 import datetime
-        
+
+#Global variable    
 params = "Default"
 
+#Function for sorting
 def sort(param, minMax, sort):
     names = ["Luminosity","Apparent Size","Temperature", "Color Index","Distance","X","Y","Z"]
     modes = ['lum','app_size','temperature','ci','distance','x','y','z']
@@ -18,14 +20,9 @@ def sort(param, minMax, sort):
     lambda:updateFlag(False)
     if(sort == "HeapSort"):
         start_time = datetime.datetime.now()
-        #heap.re_heapify(modes[names.index(param)],minMax)
         heap.heap_sort(modes[names.index(param)],minMax)
         end_time = datetime.datetime.now()
-        changeTime(end_time - start_time)
-
-
-        
-        
+        changeTime(end_time - start_time) 
     else:
         start_time = datetime.datetime.now()
         heap._quick_sort(modes[names.index(param)],minMax)
@@ -35,7 +32,7 @@ def sort(param, minMax, sort):
 
     
 
-    
+
 class app(tk.Tk):
 
     def __init__(self,*args,**kwargs):
@@ -43,7 +40,7 @@ class app(tk.Tk):
         
         
 
-
+        # Dark Forest theme for Tkinter
         tk.Tk.__init__(self,*args,**kwargs)
         self.tk.call('source','Forest-ttk-theme-master/forest-dark.tcl')
         ttk.Style().theme_use('forest-dark')
@@ -53,7 +50,9 @@ class app(tk.Tk):
         main.grid_rowconfigure(0, weight=1)
         main.grid_columnconfigure(0, weight=1)
         
+        
 
+        # List of frames to switch between
         self.frames = {}
         pages = (startWindow,starWindow)
         for F in pages:
@@ -71,7 +70,7 @@ class app(tk.Tk):
         
         frame.tkraise()
 
-
+# Parent class for both start and star windows
 class GUI(tk.Frame):
     def __init__(self,parent):
         tk.Frame.__init__(self,parent)
@@ -192,7 +191,7 @@ class starWindow(GUI):
         infoVar = tk.StringVar(value=params)
         infoText = tk.Label(infoPanel,textvariable=infoVar)
         infoText.place(rely= 0.1, relx= 0.2, relwidth=0.6)
-
+        # Needed for info panel
         def updateParams():
             infoVar.set(params)
             lambda:updateFlag(True)
@@ -205,7 +204,7 @@ class starWindow(GUI):
         canvas = FigureCanvasTkAgg(figure, master=graphFrame)
         self.plot(figure,canvas)
         
-
+        # Doesn't work but it was supposed to let the user know the graph shown is up to date with the data table
         updateVar = tk.StringVar(value="Click to update!")
         def refreshUpdate():
             
@@ -215,6 +214,7 @@ class starWindow(GUI):
                 updateVar.set("Click to update!")
             lambda:updateFlag(True)
 
+        # Left side controls
         saveButton = ttk.Button(controlPanel, text = "Save Image", style = "Accent.TButton", command= saveFig(figure))
         saveButton.place(relx=0.275, rely = 0.2,relwidth=0.45)
         updateButton = ttk.Button(controlPanel, textvariable=updateVar, style = "Accent.TButton", command=lambda:[self.plot(figure,canvas),updateParams(),refreshUpdate])
@@ -237,18 +237,21 @@ class starWindow(GUI):
         return params
 
     def makePlotX(self):
+        # Transform from radians to degrees
         rVal = []
         for i in range(1,500):
             rVal.append(heap.heap[i].phi * 180/math.pi)
         return rVal
 
     def makePlotY(self):
+        # Transform from radians to degrees
         rVal = []
         for i in range(1,500):
             rVal.append(heap.heap[i].theta * 180/math.pi)
         return rVal
         
     def makePlotS(self):
+        # Apparent magnitude means the object is more visible the smaller the value, which means that to preserve we must flip the values around x=0 and shift till they are all positive
         rVal = []
         for i in range(1,500):
             rVal.append(-heap.heap[i].app_size)
@@ -257,6 +260,7 @@ class starWindow(GUI):
         
     def makePlotC(self):
         rVal = []
+        # Color index data comes from wikipedia
         for i in range(1,500):
             if(heap.heap[i].ci >= 1.4):
               rVal.append("red")     
@@ -272,6 +276,7 @@ class starWindow(GUI):
             elif(heap.heap[i].ci < 0 and heap.heap[i].ci>=-0.4):
                 rVal.append("cyan")
             else:
+                # Pink for invalid values or nan
                 rVal.append("pink")
                 
         return rVal
@@ -301,24 +306,32 @@ class starWindow(GUI):
             ax.set_ylim(-90,90)
             ax.grid(True)
             canvas.draw()
+            saveFig(figure)
 
         
     
         
-
+# Global variables
 lastTime = ""
 updateFlag = True
+
+# Main data object, default set to maxHeap with respect to luminosity
 heap = daci.create_star_data_heap("lum") 
 
-def updateFlag(bool):
-    global updateFlag
-    updateFlag = bool
 
+# Function never worked
+def updateFlag(val):
+    global updateFlag
+    updateFlag = val
+# Change global variable from wherever
 def changeTime(time):
     global lastTime
     lastTime = str(time)
+# Save figure
 def saveFig(figure):
     figure.savefig("figure.png", dpi = 1000)
+
+# Change global variable with information about last sort from wherever
 def changeParams(param,minMax,sort):
     global params
     params = "Parameter: " + param + "\nType of sort: " + sort + "\nExtrema: " + minMax
@@ -331,13 +344,3 @@ root.title('Star Gator')
 
 root.mainloop()
 
-
-        
-
-
-
-
-
-root = app()
-
-root.mainloop()
