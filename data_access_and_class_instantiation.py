@@ -1,12 +1,12 @@
 import math
 from typing import List
 
-import numpy as np
-import pandas as pd
-import datetime
+import numpy as np # numpy library to help with calculations
+import pandas as pd # pandas library to help parse the star CSV
+import datetime # used to compare quicksort vs heapsort runtimes
 
 
-class Star:
+class Star: # Star class which holds all the attributes
     def __init__(self, id, id_type, proper_name, luminosity, x0, y0, z0, dist, app_size, ci):
         self.id = id
         self.id_type = id_type
@@ -22,7 +22,7 @@ class Star:
         cos_th = self.z0 / (np.sqrt(np.sum(np.square([x0, y0, z0]))))
         tan_phi = self.y0 / self.x0
         self.phi = np.arctan(tan_phi)
-        if (x0 < 0):
+        if (x0 < 0): # setting up for spherical coordinates
             if (y0 < 0):
                 self.phi += math.pi
             else:
@@ -64,19 +64,19 @@ class Star:
         return self.z0
 
 
-class MaxHeap:
+class MaxHeap: # MaxHeap class used for heap sort
     def __init__(self, mode):
         self.heap = [None]
         self.mode = mode
-        self.sort_mode = "max"  # default
+        self.sort_mode = "max"  # max by default
 
-    def insert(self, x):
+    def insert(self, x): # insert into heap
         if self.sort_mode == "min":
             return
         self.heap.append(x)
         i = len(self.heap) - 1
 
-        if self.mode == "lum":
+        if self.mode == "lum": # luminosity sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -84,7 +84,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "app_size":
+        elif self.mode == "app_size": # apparent size sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -92,7 +92,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "temperature":
+        elif self.mode == "temperature": # temperature sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -100,7 +100,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "distance":
+        elif self.mode == "distance": # distance sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -108,7 +108,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "ci":
+        elif self.mode == "ci": #color index sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -116,7 +116,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "x":
+        elif self.mode == "x": # cartesian x coordinate sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -124,7 +124,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "y":
+        elif self.mode == "y": # cartesian y coordinate sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -132,7 +132,7 @@ class MaxHeap:
                     self.heap[i], self.heap[parent], i = self.heap[parent], self.heap[i], parent
                 else:
                     break
-        elif self.mode == "z":
+        elif self.mode == "z": # cartesian z coordinate sorting mode
 
             while i > 1:
                 parent = i // 2
@@ -151,7 +151,7 @@ class MaxHeap:
                     break
             return
 
-    def pop(self):
+    def pop(self): # pop from heap
         if self.sort_mode  == min:
             return self.min_pop()
 
@@ -284,7 +284,7 @@ class MaxHeap:
                 else:
                     return popped
 
-    def re_heapify_helper(self, i, end):
+    def re_heapify_helper(self, i, end): # helper function for re_heapify that sorts by attribute
         if self.mode == "lum":
             while True:
                 left = 2 * i
@@ -404,7 +404,7 @@ class MaxHeap:
         else:
             return
 
-    def min_re_heapify_helper(self, i, end):
+    def min_re_heapify_helper(self, i, end): # helper function that sorts by attribute for min heap
         if self.mode == "lum":
             while True:
                 left = 2 * i
@@ -524,7 +524,7 @@ class MaxHeap:
         else:
             return
 
-    def re_heapify(self, mode,sort_mode = "max" ):
+    def re_heapify(self, mode,sort_mode = "max" ): # heapify for max heap
 
         if mode == self.mode and sort_mode == self.sort_mode:
             return
@@ -546,7 +546,7 @@ class MaxHeap:
                 self.re_heapify_helper(i, end)
                 i = i - 1
 
-    def min_pop(self):
+    def min_pop(self): # pop from min heap
         if self.sort_mode !="min":
             return
         if len(self.heap) == 1:
@@ -678,7 +678,7 @@ class MaxHeap:
                 else:
                     return popped
 
-    def heap_sort(self,mode,sort_mode):
+    def heap_sort(self,mode,sort_mode): # heap sort function
 
 
 
@@ -713,7 +713,7 @@ class MaxHeap:
 
 
 
-def create_star_data_heap(mode):
+def create_star_data_heap(mode): # parses CSV file to create Star class objects into maxHeap
     start_time = datetime.datetime.now()
     df = pd.read_csv('hyg_v37.csv')
     end_time = datetime.datetime.now()
@@ -773,7 +773,7 @@ def create_star_data_heap(mode):
     return out
 
 
-def create_star_data_list(mode):
+def create_star_data_list(mode): # parses CSV file to create Star class objects in a list
     start_time = datetime.datetime.now()
     df = pd.read_csv('hyg_v37.csv')
     end_time = datetime.datetime.now()
@@ -842,6 +842,7 @@ def distance_between_stars(s1, s0):  # in parsecs
     return np.sqrt(sos)
 
 
+#comparison of times
 
 start_time = datetime.datetime.now()
 #A = create_star_data_heap("x")
