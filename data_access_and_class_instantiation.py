@@ -6,193 +6,6 @@ import pandas as pd
 import datetime
 
 
-
-
-
-
-def max_partition(arr,left,right,mode):
-    i = left-1
-    pivot = arr[right]
-
-    if mode == "lum":
-        for k in range(left,right):
-            if arr[k].luminosity >= pivot.luminosity:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-
-    if mode == "distance":
-        for s in range(left, right):
-            if arr[s].distance >= pivot.distance:
-                i += 1
-
-                arr[i], arr[s] = arr[s], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-    elif mode == "ci":
-        for k in range(left, right):
-            if arr[k].ci >= pivot.ci:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-    elif mode == "x":
-        for k in range(left, right):
-            if arr[k].x0 >= pivot.x0:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-    elif mode == "y":
-        for k in range(left, right):
-            if arr[k].y0 >= pivot.y0:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-        return i+1
-    elif mode == "z":
-        for k in range(left, right):
-            if arr[k].z0 >= pivot.z0:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-        return i+1
-    elif mode == "temperature":
-        for k in range(left, right):
-            if arr[k].temperature >= pivot.temperature:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-        return i + 1
-    elif mode == "app_size":
-        for k in range(left, right):
-            if arr[k].app_size >= pivot.app_size:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-        return i + 1
-def min_partition(arr,left,right,mode):
-    i = left - 1
-    pivot = arr[right]
-
-    if mode == "lum":
-        for k in range(left, right):
-            if arr[k].luminosity <= pivot.luminosity:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-
-    elif mode == "distance":
-        for k in range(left, right):
-            if arr[k].distance <= pivot.distance:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-    elif mode == "ci":
-        for k in range(left, right):
-            if arr[k].ci <= pivot.ci:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-    elif mode == "x":
-        for k in range(left, right):
-            if arr[k].x0 <= pivot.x0:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-        return i + 1
-    elif mode == "y":
-        for k in range(left, right):
-            if arr[k].y0 <= pivot.y0:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-
-    elif mode == "z":
-        for k in range(left, right):
-            if arr[k].z0 <= pivot.z0:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-    elif mode == "temperature":
-        for k in range(left, right):
-            if arr[k].temperature <= pivot.temperature:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-        return i + 1
-    elif mode == "app_size":
-        for k in range(left, right):
-            if arr[k].app_size <= pivot.app_size:
-                i += 1
-
-                arr[i], arr[k] = arr[k], arr[i]
-        arr[i + 1], arr[right] = arr[right], arr[i + 1]
-        return i + 1
-
-def min_quick_sort_helper(arr,left,right, mode):
-    if left < right:
-        piv_point = min_partition(arr, left, right, mode)
-        min_quick_sort_helper(arr, left, piv_point - 1, mode)
-        min_quick_sort_helper(arr, piv_point + 1, right, mode)
-
-
-def max_quick_sort_helper(arr,left,right, mode):
-
-    if left<right:
-        piv_point = max_partition(arr,left,right,mode)
-        max_quick_sort_helper(arr,left,piv_point-1,mode)
-        max_quick_sort_helper(arr,piv_point+1,right,mode)
-
-    return arr
-
-
-
-def quick_sort(arr,mode,sort_mode):
-## based around the heap
-
-    left = 0
-    right = len(arr)-1
-
-    if(sort_mode == "max"):
-        max_quick_sort_helper(arr,left,right,mode)
-    elif(sort_mode == "min"):
-        min_quick_sort_helper(arr,left,right,mode)
-
-    return arr
-
-
-
-
-
-
-
 class Star:
     def __init__(self, id, id_type, proper_name, luminosity, x0, y0, z0, dist, app_size, ci):
         self.id = id
@@ -890,16 +703,6 @@ class MaxHeap:
             self.heap = swap
             return
 
-    def _quick_sort(self,mode,sort_mode):
-        if (mode != self.mode):
-            self.mode = mode
-
-        if (sort_mode!=self.sort_mode):
-            self.sort_mode = sort_mode
-        self.heap = self.heap[1:]
-        self.heap = quick_sort(self.heap,mode,sort_mode)
-        self.heap = [None] + self.heap
-
     def __str__(self):
         out = f"{self.heap[1]}"
         if len(self.heap) > 2:
@@ -961,8 +764,8 @@ def create_star_data_heap(mode):
         dist = float(row["dist"])
         lum = (row["lum"])
         app_size = float(row["mag"])
-        ci = float (row["ci"])
-        if math.isnan(ci):
+        ci = float(row["ci"])
+        if ci == math.nan:
             ci = 20
         proper_name = row["proper"]
         inp = Star(id, id_type, proper_name, lum, x, y, z, dist, app_size, ci)
@@ -1015,7 +818,7 @@ def create_star_data_list(mode):
 
         x = float(row["x"])
         y = float(row["y"])
-        z = float(row["z"])
+        z = float(["z"])
         dist = float(row["dist"])
         lum = float(row["lum"])
         app_size = float(row["mag"])
@@ -1040,29 +843,12 @@ def distance_between_stars(s1, s0):  # in parsecs
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 start_time = datetime.datetime.now()
-A = create_star_data_heap("x")
+#A = create_star_data_heap("x")
 #print(A.heap[1].luminosity)
 #print(A.heap[1].temperature)
 #A.heap_sort("lum","min")
 #print(A.heap[1].luminosity)
-A._quick_sort("app_size","max")
-print(A.heap[1].luminosity)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
