@@ -274,27 +274,155 @@ def distance_between_stars(s1, s0):  # in parsecs
     return np.sqrt(sos)
 
 
-def quick_sort(x):
-    pivot = len(x)
+def max_partition(arr,left,right,mode):
+    i = left - 1
+    pivot = arr[right]
+    j = left
+
+    if mode == "lum":
+        while j < right:
+            if arr[j].luminosity >= pivot.luminosity:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+
+    elif mode == "distance":
+        while j < right:
+            if arr[j].distance >= pivot.distance:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "ci":
+        while j < right:
+            if arr[j].ci >= pivot.ci:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "x":
+        while j < right:
+            if arr[j].x0 >= pivot.x0:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "y":
+        while j < right:
+            if arr[j].y0 >= pivot.y0:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+
+    elif mode == "z":
+        while j < right:
+            if arr[j].z0 >= pivot.z0:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "temperature":
+        while j < right:
+            if arr[j].temperature >= pivot.temperature:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+
+def min_partition(arr,left,right,mode):
+    i = left - 1
+    pivot = arr[right]
+    j = left
+
+    if mode == "lum":
+        while j < right:
+            if arr[j].luminosity <= pivot.luminosity:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+
+    elif mode == "distance":
+        while j < right:
+            if arr[j].distance <= pivot.distance:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "ci":
+        while j < right:
+            if arr[j].ci <= pivot.ci:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "x":
+        while j < right:
+            if arr[j].x0 <= pivot.x0:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "y":
+        while j < right:
+            if arr[j].y0 <= pivot.y0:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+
+    elif mode == "z":
+        while j < right:
+            if arr[j].z0 <= pivot.z0:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+    elif mode == "temperature":
+        while j < right:
+            if arr[j].temperature <= pivot.temperatur:
+                i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+        return i + 1
+
+
+def min_quick_sort_helper(arr,left,right, mode):
+    if left < right:
+        piv_point = min_partition(arr, left, right, mode)
+        min_quick_sort_helper(arr, left, piv_point - 1, mode)
+        min_quick_sort_helper(arr, piv_point + 1, right, mode)
+
+
+def max_quick_sort_helper(arr,left,right, mode):
+
+    if left<right:
+        piv_point = max_partition(arr,left,right,mode)
+        max_quick_sort_helper(arr,left,piv_point-1,mode)
+        max_quick_sort_helper(arr,piv_point+1,right,mode)
+
+    return arr
+
+
+
+def quick_sort(arr,mode,sort_mode):
+
     left = 0
-    right = len(x)-1
-    while True:
-        while x[left] < x[pivot]:
-            left+=1
-        while x[right] > x[pivot] and right>=0:
-            right-=1
+    right = len(arr)-1
+
+    if(sort_mode == "max"):
+        max_quick_sort_helper(arr,left,right,mode)
+    elif(sort_mode == "min"):
+        min_quick_sort_helper(arr,left,right,mode)
+
+    arr.insert(0,None)
+    return arr
 
 
 
 
 
 
+# Time for heap sorting stars by luminosity
 start_time = datetime.datetime.now()
 A = create_star_data_heap("lum")
-
 print(A.heap[1].luminosity)
 A.heap_sort()
 print(A.heap[11].luminosity)
 end_time = datetime.datetime.now()
 execution_time = end_time - start_time
 print("Execution time:", execution_time)
+
+#Time for quick sorting stars by luminosity
+quicksort_start = datetime.datetime.now();
+B = create_star_data_list("lum")
+print(b[0])
+
